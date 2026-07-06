@@ -1,0 +1,15 @@
+- name: Ensure output directory exists
+  file:
+    path: "{{ network_map_output_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Generate network diagram file
+  template:
+    src: network.md.j2
+    dest: "{{ network_map_output_dir }}/{{ network_map_filename }}"
+    mode: '0644'
+
+- name: Debug output path
+  debug:
+    msg: "{{ network_map_output_dir }}/network.md"

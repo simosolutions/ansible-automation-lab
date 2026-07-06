@@ -1,0 +1,79 @@
+- name: Install DHCP Server feature (if not already installed)
+  ansible.windows.win_feature:
+    name: DHCP
+    include_management_tools: yes
+    state: present
+
+- name: Authorise DHCP server in AD
+  ansible.windows.win_shell: |
+    Add-DhcpServerInDC
+
+- name: Set DHCP DNS options (global)
+  ansible.windows.win_shell: |
+    Set-DhcpServerv4OptionValue -DnsServer {{ dhcp_dns_servers | join(",") }}
+
+# ================================
+# VLAN 33 Scope
+# ================================
+- name: Create VLAN33 scope
+  community.windows.win_dhcp_lease:
+    name: "VLAN33"
+    start_range: 192.168.33.100
+    end_range: 192.168.33.189
+    subnet_mask: 255.255.255.0
+    state: present
+
+- name: Set VLAN33 gateway
+  ansible.windows.win_shell: |
+    Set-DhcpServerv4OptionValue -ScopeId 192.168.33.0 -Router {{ dhcp_router.vlan33 }}
+
+# ================================
+# VLAN 44 Scope
+# ================================
+- name: Create VLAN44 scope
+  community.windows.win_dhcp_lease:
+    name: "VLAN44"
+    start_range: 192.168.44.100
+    end_range: 192.168.44.189
+    subnet_mask: 255.255.255.0
+    state: present
+
+- name: Set VLAN44 gateway
+  ansible.windows.win_shell: |
+    Set-DhcpServerv4OptionValue -ScopeId 192.168.44.0 -Router {{ dhcp_router.vlan44 }}
+
+# ================================
+# VLAN 77 Scope
+# ================================
+- name: Create VLAN77 scope
+  community.windows.win_dhcp_lease:
+    name: "VLAN77"
+    start_range: 192.168.77.100
+    end_range: 192.168.77.189
+    subnet_mask: 255.255.255.0
+    state: present
+
+- name: Set VLAN77 gateway
+  ansible.windows.win_shell: |
+    Set-DhcpServerv4OptionValue -ScopeId 192.168.77.0 -Router {{ dhcp_router.vlan77 }}
+
+# ================================
+# VLAN 99 (Servers)
+# ================================
+- name: Create VLAN99 scope
+  community.windows.win_dhcp_lease:
+    name: "VLAN99-SERVERS"
+    start_range: 192.168.99.190
+    end_range: 192.168.99.199
+    subnet_mask: 255.255.255.0
+    state: present
+
+- name: Set VLAN99 gateway
+  ansible.windows.win_shell: |
+    Set-DhcpServerv4OptionValue -ScopeId 192.168.99.0 -Router {{ dhcp_router.vlan99 }}
+
+- name: Ensure DHCP service is running
+  ansible.windows.win_service:
+    name: DHCPServer
+    state: started
+    start_mode: automatic

@@ -1,0 +1,2 @@
+network_map_output_dir: "{{ ansible_user_dir }}/ansible-output/wiki-docs"
+network_map_filename: "network.md"

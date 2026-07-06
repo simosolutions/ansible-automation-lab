@@ -1,0 +1,5 @@
+- name: Generate Wiki documentation
+  hosts: localhost
+  connection: local
+  roles:
+    - docs

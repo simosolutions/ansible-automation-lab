@@ -1,0 +1,7 @@
+---
+- name: Apply Linux baseline
+  hosts: linux
+  become: true
+
+  roles:
+    - linux_common

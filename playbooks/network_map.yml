@@ -1,0 +1,6 @@
+- name: Generate network map
+  hosts: localhost
+  connection: local
+
+  roles:
+    - network_map

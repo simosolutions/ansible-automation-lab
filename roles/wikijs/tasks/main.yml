@@ -1,0 +1,15 @@
+---
+- name: Create Wiki.js directory
+  file:
+    path: /opt/wikijs
+    state: directory
+
+- name: Create docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/wikijs/docker-compose.yml
+
+- name: Start Wiki.js stack
+  community.docker.docker_compose_v2:
+    project_src: /opt/wikijs
+    state: present

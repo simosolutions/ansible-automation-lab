@@ -1,0 +1,42 @@
+- name: Run AD DS diagnostic (dcdiag)
+  ansible.windows.win_shell: |
+    dcdiag /q
+  register: dcdiag_result
+  failed_when: false
+
+- name: Check replication status
+  ansible.windows.win_shell: |
+    repadmin /replsummary
+  register: repadmin_result
+  failed_when: false
+
+- name: Test DNS resolution (domain)
+  ansible.windows.win_shell: |
+    Resolve-DnsName home.simosolutions.co.za
+  register: dns_test
+  failed_when: false
+
+- name: Check DHCP service status
+  ansible.windows.win_service:
+    name: DHCPServer
+  register: dhcp_status
+
+- name: Build validation report
+  ansible.windows.win_copy:
+    dest: C:\ansible-output\dc_validation_report.txt
+    content: |
+      ===== DC VALIDATION REPORT =====
+
+      --- DCDIAG ---
+      {{ dcdiag_result.stdout }}
+
+      --- REPLICATION ---
+      {{ repadmin_result.stdout }}
+
+      --- DNS TEST ---
+      {{ dns_test.stdout }}
+
+      --- DHCP STATUS ---
+      {{ dhcp_status.state }}
+
+      ===============================

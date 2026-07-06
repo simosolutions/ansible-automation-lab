@@ -1,0 +1,7 @@
+---
+- name: Deploy Wiki.js server
+  hosts: docker_hosts
+  become: true
+
+  roles:
+    - docker

@@ -1,0 +1,65 @@
+- name: Create OU structure
+  community.windows.win_domain_ou:
+    name: "{{ item }}"
+    path: "DC=home,DC=simosolutions,DC=co,DC=za"
+    state: present
+  loop:
+    - Users
+    - Admins
+    - Servers
+
+# ================================
+# Groups
+# ================================
+
+- name: Create Admin group
+  community.windows.win_domain_group:
+    name: GG-Domain-Admins
+    scope: global
+    path: "OU=Admins,DC=home,DC=simosolutions,DC=co,DC=za"
+    state: present
+
+- name: Create Users group
+  community.windows.win_domain_group:
+    name: GG-Domain-Users
+    scope: global
+    path: "OU=Users,DC=home,DC=simosolutions,DC=co,DC=za"
+    state: present
+
+# ================================
+# Users
+# ================================
+
+- name: Create Simo Admin user
+  community.windows.win_domain_user:
+    name: simo.admin
+    password: "{{ vault_simo_admin_password }}"
+    path: "OU=Admins,DC=home,DC=simosolutions,DC=co,DC=za"
+    enabled: yes
+    state: present
+
+- name: Create Simo standard user
+  community.windows.win_domain_user:
+    name: simo
+    password: "{{ vault_simo_user_password }}"
+    path: "OU=Users,DC=home,DC=simosolutions,DC=co,DC=za"
+    enabled: yes
+    state: present
+
+# ================================
+# Group Memberships
+# ================================
+
+- name: Add Simo Admin to Admin group
+  community.windows.win_domain_group_membership:
+    name: GG-Domain-Admins
+    members:
+      - simo.admin
+    state: present
+
+- name: Add Simo user to Users group
+  community.windows.win_domain_group_membership:
+    name: GG-Domain-Users
+    members:
+      - simo
+    state: present

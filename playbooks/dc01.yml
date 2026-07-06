@@ -1,0 +1,11 @@
+- name: Build DC01 - Home Domain Controller
+  hosts: dc01
+  gather_facts: yes
+
+  roles:
+    - windows_common
+    - ad_domain
+    - dns_config
+    - dhcp_config
+    - users_groups
+    - ntp

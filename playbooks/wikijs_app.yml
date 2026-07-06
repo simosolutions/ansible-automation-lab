@@ -1,0 +1,10 @@
+---
+- name: Deploy Wiki.js docker container
+  hosts: wikijs
+  become: true
+
+  roles:
+    - wikijs
+
+  vars_files:
+    - ../playbooks/vars/secrets.yml

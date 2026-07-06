@@ -1,0 +1,23 @@
+---
+- name: Install AD DS, DNS and DHCP roles
+  ansible.windows.win_feature:
+    name:
+      - AD-Domain-Services
+      - DNS
+      - DHCP
+    include_management_tools: true
+    state: present
+
+- name: Promote server to Domain Controller
+  microsoft.ad.domain:
+    dns_domain_name: "{{ ad_domain_name }}"
+    domain_netbios_name: "{{ ad_netbios_name }}"
+    safe_mode_password: "{{ vault_dsrm_password }}"
+    install_dns: true
+    reboot: true
+  register: domain_result
+
+- name: Wait for reboot
+  ansible.builtin.wait_for_connection:
+    delay: 30
+    timeout: 900

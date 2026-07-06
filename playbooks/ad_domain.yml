@@ -1,0 +1,7 @@
+---
+- name: Install AD DS and promote Domain Controller
+  hosts: dc01
+  gather_facts: yes
+
+  roles:
+    - ad_domain

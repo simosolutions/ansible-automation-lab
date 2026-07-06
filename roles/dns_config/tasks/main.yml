@@ -1,0 +1,37 @@
+- name: Set DNS forwarders
+  ansible.windows.win_dns_server_forwarder:
+    ip_addresses:
+      - 192.168.99.53
+      - 192.168.99.153
+
+- name: Ensure recursion is enabled
+  ansible.windows.win_dns_server_settings:
+    recursion: yes
+
+- name: Create A record for DC01
+  community.windows.win_dns_record:
+    name: dc01
+    zone: home.simosolutions.co.za
+    type: A
+    value: 192.168.99.10
+
+- name: Create A record for DC02 (future)
+  community.windows.win_dns_record:
+    name: dc02
+    zone: home.simosolutions.co.za
+    type: A
+    value: 192.168.99.11
+
+- name: Create A record for infra01
+  community.windows.win_dns_record:
+    name: infra01
+    zone: home.simosolutions.co.za
+    type: A
+    value: 192.168.99.22
+
+- name: Create A record for wiki01
+  community.windows.win_dns_record:
+    name: wiki01
+    zone: home.simosolutions.co.za
+    type: A
+    value: 192.168.99.40

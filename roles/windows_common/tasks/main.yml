@@ -1,0 +1,16 @@
+- name: Ensure WinRM is reachable
+  win_ping:
+
+- name: Install required Windows features for AD
+  ansible.windows.win_feature:
+    name:
+      - AD-Domain-Services
+      - DNS
+      - DHCP
+      - RSAT-AD-Tools
+    include_management_tools: yes
+    state: present
+
+- name: Ensure server is domain-ready (no domain yet expected)
+  debug:
+    msg: "Pre-AD checks complete"

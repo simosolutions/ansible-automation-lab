@@ -1,0 +1,10 @@
+- name: Ensure docs directory exists
+  file:
+    path: "{{ lookup('env', 'HOME') }}/ansible-output/wiki-docs"
+    state: directory
+    mode: '0755'
+
+- name: Generate infrastructure documentation
+  template:
+    src: inventory.md.j2
+    dest: "{{ lookup('env', 'HOME') }}/ansible-output/wiki-docs/inventory.md"

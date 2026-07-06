@@ -1,0 +1,9 @@
+- name: Publish documentation to Wiki.js
+  hosts: localhost
+  connection: local
+
+  vars_files:
+    - ../group_vars/all/vault.yml
+
+  roles:
+    - wikijs_publish

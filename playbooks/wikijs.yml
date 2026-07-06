@@ -1,0 +1,9 @@
+---
+- name: Deploy Wiki.js server
+  hosts: wikijs
+  become: true
+
+  roles:
+    - linux_common
+    - docker
+    - wikijs

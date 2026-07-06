@@ -1,0 +1,3 @@
+wiki_api_url: "{{ vault_wikijs_url }}"
+wiki_token: "{{ vault_wikijs_token }}"
+wiki_space: "Infrastructure"
