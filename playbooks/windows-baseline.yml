@@ -1,0 +1,8 @@
+---
+- name: Windows baseline configuration
+  hosts: windows
+
+  tasks:
+    - name: Ensure notepad++ is present (example placeholder)
+      debug:
+        msg: "Windows baseline configuration would run here"
